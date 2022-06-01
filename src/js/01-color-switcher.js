@@ -28,3 +28,5 @@ function onClickBtnStop() {
     clearInterval(timerId);
     onBtnStart.disabled = false;
 }
+
+
