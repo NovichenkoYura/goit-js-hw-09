@@ -2,6 +2,8 @@ import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
 
+import Notiflix from 'notiflix';
+
 
 const inputDate = document.querySelector('#datetime-picker');
 const onBtnStart = document.querySelector('button[data-start]')
@@ -18,13 +20,13 @@ let timeFinish;
 onBtnStart.addEventListener('click', onClickBtnStart);
 
 function onClickBtnStart() {
-    onBtnStart.disabled = true;
     count()
 }
 
 function count() {
-    intervalId = setInterval(() => {
-        delta = timeFinish - timeStart;
+  intervalId = setInterval(() => {
+       delta = timeFinish - Date.now();
+        // delta = timeFinish - timeStart;
         const dateOffset = convertMs(delta);
         clockView(dateOffset);
         
@@ -38,6 +40,14 @@ function clockView(dateOffset) {
     secondQty.textContent = dateOffset.seconds;
 }
 
+function clearView() {
+  clockView({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  })
+}
 
 const options = {
   enableTime: true,
@@ -78,20 +88,22 @@ function addLeadingZero(value) {
 
 
 function selectDate(selectTime){
-    if (!onBtnStart.disabled) {
-        return;
-    } 
-    else{
-    timeFinish = selectTime.getTime()
-    delta = timeFinish-timeStart;
+      timeFinish = Date.parse(selectTime);
+      // timeFinish = selectTime.getTime()  - до порад Андрія
+      // delta = timeFinish - Date.now();
+      delta = timeFinish-Date.now();  
     
-    if (delta <= 0) {
-    window.alert("Please choose a date in the future");
+  if (delta <= 0) {
+    onBtnStart.disabled = true;
+    clearInterval(intervalId);
+    clearView()
+    // window.alert("Please choose a date in the future");
+
+    Notiflix.Notify.failure("Please choose a date in the future");
       return;
     }
     else {
     onBtnStart.disabled = false;
     return timeFinish;
     }
-  }
 };
