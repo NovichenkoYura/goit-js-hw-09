@@ -8,7 +8,7 @@ const onBtnStart = document.querySelector('button[data-start]')
 let daysQty = document.querySelector('span[data-days]');
 let hoursQty = document.querySelector('span[data-hours]');
 let minuteQty = document.querySelector('span[data-minutes]');
-let secondQty = documetn.querySelector('span[data-seconds]');
+let secondQty = document.querySelector('span[data-seconds]');
 let intervalId;
 let delta;
 let timeStart = new Date();
@@ -60,15 +60,19 @@ function convertMs(ms) {
   const day = hour * 24;
 
   // Remaining days
-  const days = Math.floor(ms / day);
+  const days = addLeadingZero(Math.floor(ms / day));
   // Remaining hours
-  const hours = Math.floor((ms % day) / hour);
+  const hours = addLeadingZero(Math.floor((ms % day) / hour));
   // Remaining minutes
-  const minutes = Math.floor(((ms % day) % hour) / minute);
+  const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
   // Remaining seconds
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+  const seconds = addLeadingZero(Math.floor((((ms % day) % hour) % minute) / second));
 
   return { days, hours, minutes, seconds };
+}
+
+function addLeadingZero(value) {
+  return String(value).padStart(2, '0');
 }
 
 
